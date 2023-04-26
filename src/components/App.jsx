@@ -52,10 +52,10 @@ export const App = () => {
   return (
     <Layout>
       <GlobalStyle />
-      <ToastContainer autoClose={3000} />
       {error && <h2>{error.message}</h2>}
+      <ToastContainer autoClose={3000} />
       <Searchbar onSubmit={onChangeQuery} />
-      <ImageGallery error={error} images={images} />
+      <ImageGallery images={images} />
       {loading && <Loader />}
       {images.length > 0 && <LoadMoreBtn onClick={handleLoadMore} />}
     </Layout>
