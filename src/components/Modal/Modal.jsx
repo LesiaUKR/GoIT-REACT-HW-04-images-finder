@@ -1,45 +1,40 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Overlay, Modalka, ModalCloseBtn } from './Modal.styled';
 import { IoMdClose } from 'react-icons/io';
 
-export class Modal extends Component {
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
+export const Modal = ({ onClose, children }) => {
+  
+  useEffect(() => {
+    const handleKeyDown = evt => {
+      if (evt.key === "Escape") {
+        onClose();
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown); 
+  }, [onClose]);
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = evt => {
-    if (evt.key === 'Escape') {
-      this.props.onClose();
-    }
-  };
-
-  handleOverlayClick = evt => {
+  const handleOverlayClick = evt => {
     evt.stopPropagation();
     if (evt.currentTarget === evt.target) {
-      this.props.onClose();
+      onClose();
     }
   };
-
-  render() {
     return createPortal(
-      <Overlay onClick={this.handleOverlayClick}>
+      <Overlay onClick={handleOverlayClick}>
         <Modalka>
-          <ModalCloseBtn type="button" onClick={this.props.onClose}>
+          <ModalCloseBtn type="button" onClick={onClose}>
             <IoMdClose size="12" />
           </ModalCloseBtn>
-          {this.props.children}
+          {children}
         </Modalka>
       </Overlay>,
       document.querySelector('#modal-root')
     );
   }
-}
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
