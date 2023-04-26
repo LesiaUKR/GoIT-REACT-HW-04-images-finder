@@ -12,3 +12,11 @@ export const ImageList = styled.ul`
   margin-left: auto;
   margin-right: auto;
 `;
+
+export const ErrorInfo = styled.div`
+display: flex;
+justify-content: center;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+`;

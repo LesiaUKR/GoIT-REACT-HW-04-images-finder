@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
-import { ImageList } from './ImageGallery.styled';
+import { ImageList} from './ImageGallery.styled';
 
-export function ImageGallery ({images},error) {
+export function ImageGallery({ images, error }) {
   return (
     <ImageList>
       {images.map(({ id, tags, webformatURL, largeImageURL }) => (
@@ -16,7 +16,7 @@ export function ImageGallery ({images},error) {
       ))}
     </ImageList>
   );
-  }
+}
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(

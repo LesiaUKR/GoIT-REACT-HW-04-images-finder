@@ -8,6 +8,7 @@ import { fetchImages } from './serviceAPI/ImagesAPI';
 import { Loader } from 'components/Loader/Loader';
 import { LoadMoreBtn } from 'components/LoadMoreBtn/LoadMoreBtn';
 // import { toast } from 'react-toastify';
+import { ErrorInfo } from 'components/ImageGallery/ImageGallery.styled';
 
 export const App = () => {
   const [searchText, setSearchText] = useState('');
@@ -15,7 +16,6 @@ export const App = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
-  // const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
     if (!searchText) {
@@ -27,7 +27,16 @@ export const App = () => {
 
     fetchImages(searchText, page)
       .then((responseImages) => {
-        setImages(prevImages => [...prevImages, ...responseImages.hits]);
+          if (responseImages.totalHits === 0) {
+            setError(
+              'Sorry, there are no images matching your search query. Please try again.'
+            );
+            return;
+          } else {
+            setImages(prevImages => [...prevImages, ...responseImages.hits]);
+                    console.log(responseImages);
+                    console.log(responseImages.totalHits);
+          }
       })
       .catch(error => {
         setError(error.message);
@@ -52,10 +61,10 @@ export const App = () => {
   return (
     <Layout>
       <GlobalStyle />
-      {error && <h2>{error.message}</h2>}
       <ToastContainer autoClose={3000} />
       <Searchbar onSubmit={onChangeQuery} />
-      <ImageGallery images={images} />
+      {error && <ErrorInfo>{error}</ErrorInfo>}
+      {images.length > 0 && <ImageGallery images={images} error={error} />}
       {loading && <Loader />}
       {images.length > 0 && <LoadMoreBtn onClick={handleLoadMore} />}
     </Layout>
